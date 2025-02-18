@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+GEMINI_API_KEY="${GEMINI_API_KEY:-''}"
+
+( curl "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=$GEMINI_API_KEY" \
+    --silent \
+    --header 'Content-Type: application/json' \
+    --request POST \
+    --data @- <<EOF
+{
+  "contents": [{
+    "parts":[{"text": "$1"}]
+  }]
+}
+EOF
+) | jq -r '.candidates[].content.parts | map(.text) | join("\n")'

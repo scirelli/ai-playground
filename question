@@ -1,0 +1,19 @@
+#!/usr/bin/env node
+
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+const GEMINI_API_KEY=process.env.GEMINI_API_KEY;
+
+const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
+const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+
+if (process.argv.length === 2) {
+  console.error('Expected at least one argument!');
+  process.exit(1);
+}
+
+async function test() {
+	const result = await model.generateContent(process.argv[2]);
+	console.log(result.response.text());
+}
+
+test();

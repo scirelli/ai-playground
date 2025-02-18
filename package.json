@@ -1,0 +1,26 @@
+{
+  "name": "ai-playground",
+  "version": "1.0.0",
+  "description": "Testing out AI APIs",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/scirelli/ai-playground.git"
+  },
+  "keywords": [
+    "ai",
+    "node"
+  ],
+  "author": "Steve Cirelli",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/scirelli/ai-playground/issues"
+  },
+  "homepage": "https://github.com/scirelli/ai-playground#readme",
+  "dependencies": {
+    "@google/generative-ai": "^0.21.0"
+  }
+}
