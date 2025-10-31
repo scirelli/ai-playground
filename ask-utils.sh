@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+GEMINI_API_KEY="${GEMINI_API_KEY:-''}"
+
+googleGetModel() {
+    (curl \
+        --silent \
+        --header 'Content-Type: application/json' \
+        "https://generativelanguage.googleapis.com/v1beta/models/?key=$GEMINI_API_KEY") \
+    | jq -r '.models[].name' | grep flash | sort | head -n 1
+}
+
+googleRequest() {
+    model=$(googleGetModel)
+    ( curl "https://generativelanguage.googleapis.com/v1beta/${model}:generateContent?key=$GEMINI_API_KEY" \
+        --silent \
+        --header 'Content-Type: application/json' \
+        --request POST \
+        --data @- <<EOF
+{
+  "contents": [{
+    "parts":[{"text": "$1"}]
+  }]
+}
+EOF
+    ) | jq -r '.candidates[].content.parts | map(.text) | join("\n")'
+}
+
+localRequest() {
+    (curl http://jetson-nano-orin:11434/api/generate \
+        --silent \
+        --header 'Content-Type: application/json' \
+        --request POST \
+        --data @- <<EOF
+{
+    "model": "deepseek-coder",
+    "prompt":"$1",
+    "options": {
+        "num_ctx": 4096,
+        "num_predict": 4096
+    }
+}
+EOF
+    ) | jq -r '.response' | tr --delete '\n\r'
+    echo ''
+}
