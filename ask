@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 
 GEMINI_API_KEY="${GEMINI_API_KEY:-''}"
+model=$(curl --silent --header 'Content-Type: application/json' "https://generativelanguage.googleapis.com/v1beta/models/?key=$GEMINI_API_KEY" | jq -r '.models[].name' | grep flash | sort | head -n 1)
 
-( curl "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=$GEMINI_API_KEY" \
+( curl "https://generativelanguage.googleapis.com/v1beta/${model}:generateContent?key=$GEMINI_API_KEY" \
     --silent \
     --header 'Content-Type: application/json' \
     --request POST \
