@@ -44,3 +44,4 @@ EOF
     ) | jq -r '.response' | tr --delete '\n\r'
     echo ''
 }
+alias lai='localRequest'
